@@ -8,8 +8,14 @@ import {
   Home,
   CalendarCheck,
   Star,
-  Flame
+  Flame,
+  PencilLine,
+  TimerOff,
+  UserMinus,
+  MoreHorizontal
 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/DropdownMenu"
 import { 
   Table, 
   TableBody, 
@@ -156,6 +162,136 @@ const ProgressRing = ({ value, goal, size = 24 }: { value: number, goal: number,
   )
 }
 
+const DopamineNumber = ({ value }: { value: number }) => {
+  const [displayValue, setDisplayValue] = React.useState(value);
+  const [showPlusOne, setShowPlusOne] = React.useState(false);
+  const prevValue = React.useRef(value);
+
+  React.useEffect(() => {
+    if (value > prevValue.current) {
+      setShowPlusOne(true);
+      setTimeout(() => setShowPlusOne(false), 1000);
+    }
+    setDisplayValue(value);
+    prevValue.current = value;
+  }, [value]);
+
+  return (
+    <div className="relative flex items-center gap-1 font-mono font-bold text-sm text-slate-900">
+      <motion.span
+        key={value}
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
+        {displayValue}
+      </motion.span>
+
+      <AnimatePresence>
+        {showPlusOne && (
+          <motion.span
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: -20 }}
+            exit={{ opacity: 0 }}
+            className="absolute left-full ml-1 text-[10px] text-emerald-500 font-black"
+          >
+            +1
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const AppointmentCell = ({ total, streak, agentName }: { total: number, streak: number, agentName: string }) => {
+  return (
+    <div className="flex items-center justify-between group/apt px-2 py-1 rounded-md transition-all hover:bg-slate-50/50 hover:shadow-sm border border-transparent hover:border-slate-200/60">
+      <div className="flex items-center gap-3">
+        <AnimatePresence>
+          {streak > 0 && (
+            <motion.div 
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              className="flex items-center gap-0.5"
+            >
+              <Flame className={cn(
+                "h-4 w-4 fill-current",
+                streak >= 7 ? "text-indigo-500 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" : "text-orange-500"
+              )} />
+              <span className={cn(
+                "text-[10px] font-black italic",
+                streak >= 7 ? "text-indigo-600" : "text-orange-600"
+              )}>{streak}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <HoverCard openDelay={100}>
+          <HoverCardTrigger asChild>
+            <button className="border-b border-dotted border-slate-300 hover:border-slate-900 transition-colors">
+              <DopamineNumber value={total} />
+            </button>
+          </HoverCardTrigger>
+          <HoverCardContent side="right" align="start" className="w-64 p-4 shadow-xl border-slate-200 backdrop-blur-md bg-white/95 normal-case tracking-normal">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Breakdown</h4>
+                <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-bold">TOTAL: {total}</span>
+              </div>
+              <Separator />
+              <div className="grid gap-2">
+                <div className="flex justify-between text-sm items-center">
+                  <div className="flex items-center gap-2 text-slate-600">
+                    <Home className="h-3.5 w-3.5 text-blue-500" />
+                    <span>Showings</span>
+                  </div>
+                  <span className="font-mono text-slate-900">{Math.floor(total * 0.5)}</span>
+                </div>
+                <div className="flex justify-between text-sm items-center">
+                  <div className="flex items-center gap-2 text-slate-600">
+                    <Users className="h-3.5 w-3.5 text-purple-500" />
+                    <span>Meetings</span>
+                  </div>
+                  <span className="font-mono text-slate-900">{Math.ceil(total * 0.3)}</span>
+                </div>
+                <div className="flex justify-between text-sm items-center">
+                  <div className="flex items-center gap-2 text-slate-600">
+                    <CalendarCheck className="h-3.5 w-3.5 text-emerald-500" />
+                    <span>Open Houses</span>
+                  </div>
+                  <span className="font-mono text-slate-900">{Math.ceil(total * 0.2)}</span>
+                </div>
+              </div>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+      </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-7 w-7 p-0 opacity-0 group-hover/apt:opacity-100 transition-opacity">
+            <MoreHorizontal className="h-4 w-4 text-slate-400" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-52">
+          <DropdownMenuLabel className="text-[10px] uppercase text-slate-400">Manage {agentName.split(' ')[0]}</DropdownMenuLabel>
+          <DropdownMenuItem className="gap-2 focus:text-blue-600 cursor-pointer">
+            <PencilLine className="h-4 w-4 text-blue-500" /> Edit Goals
+          </DropdownMenuItem>
+          <DropdownMenuItem className="gap-2 focus:text-amber-600 cursor-pointer">
+            <TimerOff className="h-4 w-4 text-amber-500" /> Pause Tracking
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="gap-2 text-destructive focus:bg-red-50 focus:text-destructive cursor-pointer">
+            <UserMinus className="h-4 w-4" /> Remove Agent
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+};
+
 export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps) {
   const [data, setData] = React.useState<AgentGoal[]>(MOCK_AGENTS)
   const [editingId, setEditingId] = React.useState<string | null>(null)
@@ -234,55 +370,19 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Calls</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Unique Convos</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                   <span>Appointments</span>
                   <HoverCard openDelay={200}>
                     <HoverCardTrigger asChild>
-                      <Info className="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 transition-colors" />
+                      <Info className="h-3 w-3 cursor-help text-slate-300 hover:text-slate-500 transition-colors" />
                     </HoverCardTrigger>
-                    <HoverCardContent className="w-[360px] p-4 normal-case tracking-normal shadow-xl border-slate-200" side="top" sideOffset={10}>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-sm font-bold text-slate-800 leading-none">Appointment Definitions</h4>
-                          <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-mono font-bold text-slate-600">
-                            DOCS
-                          </span>
-                        </div>
-                        <Separator className="bg-slate-100" />
-                        <div className="space-y-4 pt-1">
-                          <div className="flex gap-4">
-                            <div className="mt-0.5 bg-blue-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
-                              <Home className="h-4 w-4 text-blue-500" />
-                            </div>
-                            <div className="space-y-0.5">
-                              <p className="text-[13px] font-bold text-slate-800">Property Showings</p>
-                              <p className="text-[11px] text-slate-500 leading-relaxed">In-person tours of listings for prospective buyer clients.</p>
-                            </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="mt-0.5 bg-purple-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
-                              <Users className="h-4 w-4 text-purple-500" />
-                            </div>
-                            <div className="space-y-0.5">
-                              <p className="text-[13px] font-bold text-slate-800">Client Meetings</p>
-                              <p className="text-[11px] text-slate-500 leading-relaxed">Strategic consultations, listing presentations, or signing sessions.</p>
-                            </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="mt-0.5 bg-emerald-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
-                              <CalendarCheck className="h-4 w-4 text-emerald-500" />
-                            </div>
-                            <div className="space-y-0.5">
-                              <p className="text-[13px] font-bold text-slate-800">Open Houses</p>
-                              <p className="text-[11px] text-slate-500 leading-relaxed">Scheduled public marketing events to drive high volume traffic.</p>
-                            </div>
-                          </div>
-                        </div>
-                        <Separator className="bg-slate-100" />
-                        <p className="text-[10px] text-muted-foreground italic">
-                          Includes both scheduled and completed events.
-                        </p>
-                      </div>
+                    <HoverCardContent side="top" className="text-xs p-3 w-60 font-normal normal-case tracking-normal shadow-lg border-slate-200">
+                      <p className="font-bold mb-1 text-slate-900">Activity Definitions</p>
+                      <ul className="space-y-1 text-slate-500">
+                        <li>• <strong>Property Showings:</strong> Scheduled tours</li>
+                        <li>• <strong>Client Meetings:</strong> Strategy sessions</li>
+                        <li>• <strong>Open Houses:</strong> Public events held</li>
+                      </ul>
                     </HoverCardContent>
                   </HoverCard>
                 </div>
@@ -355,7 +455,10 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                   
                   {["newLeads", "calls", "uniqueConvos", "appointments"].map((field) => (
                     <TableCell key={field}>
-                      <div className="flex items-center gap-3">
+                      <div className={cn(
+                        "flex items-center gap-3 group/cell px-2 py-1 rounded-md transition-all",
+                        field === "appointments" && hasGoals ? "hover:bg-slate-50/50 hover:shadow-sm border border-transparent hover:border-slate-200/60" : ""
+                      )}>
                         {hasGoals && agent.actuals && (
                           <ProgressRing 
                             value={agent.actuals[field as keyof typeof agent.actuals]} 
@@ -370,63 +473,19 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                             onChange={(e) => handleInputChange(field as keyof typeof editValues, e.target.value)}
                           />
                         ) : field === "appointments" && hasGoals ? (
-                          <HoverCard openDelay={100}>
-                            <HoverCardTrigger asChild>
-                              <span className="cursor-help font-bold text-slate-900 border-b-2 border-dotted border-blue-400/40 hover:border-blue-600 transition-colors">
-                                {agent.goals?.[field as keyof typeof agent.goals]}
-                              </span>
-                            </HoverCardTrigger>
-                            <HoverCardContent side="right" align="start" className="w-[280px] p-4 normal-case tracking-normal shadow-xl border-slate-200">
-                              <div className="space-y-3">
-                                <div className="flex items-center justify-between">
-                                  <h4 className="text-sm font-bold text-slate-800">Appointment Breakdown</h4>
-                                  <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-mono font-bold text-slate-600 uppercase">
-                                    Total: {agent.goals?.appointments}
-                                  </span>
-                                </div>
-                                
-                                <Separator className="bg-slate-100" />
-                                
-                                <div className="grid gap-3 pt-1">
-                                  <div className="flex items-center justify-between text-[13px]">
-                                    <div className="flex items-center gap-2 text-slate-600">
-                                      <Home className="h-4 w-4 text-blue-500" />
-                                      <span>Property Showings</span>
-                                    </div>
-                                    <span className="font-mono font-medium text-slate-900">{Math.floor((agent.goals?.appointments || 0) * 0.5)}</span>
-                                  </div>
-                                  
-                                  <div className="flex items-center justify-between text-[13px]">
-                                    <div className="flex items-center gap-2 text-slate-600">
-                                      <Users className="h-4 w-4 text-purple-500" />
-                                      <span>Client Meetings</span>
-                                    </div>
-                                    <span className="font-mono font-medium text-slate-900">{Math.ceil((agent.goals?.appointments || 0) * 0.3)}</span>
-                                  </div>
-                                  
-                                  <div className="flex items-center justify-between text-[13px]">
-                                    <div className="flex items-center gap-2 text-slate-600">
-                                      <CalendarCheck className="h-4 w-4 text-emerald-500" />
-                                      <span>Open Houses</span>
-                                    </div>
-                                    <span className="font-mono font-medium text-slate-900">{Math.ceil((agent.goals?.appointments || 0) * 0.2)}</span>
-                                  </div>
-                                </div>
-
-                                <Separator className="bg-slate-100" />
-                                
-                                <p className="text-[10px] text-muted-foreground italic leading-tight">
-                                  Includes both scheduled and completed events.
-                                </p>
-                              </div>
-                            </HoverCardContent>
-                          </HoverCard>
+                          <AppointmentCell 
+                            total={agent.goals?.appointments || 0} 
+                            streak={agent.streak || 0}
+                            agentName={agent.name}
+                          />
                         ) : (
                           <div className={cn(
                             "text-[14px]",
                             hasGoals ? "font-semibold text-slate-900" : "font-medium text-gray-300"
                           )}>
-                            {hasGoals ? agent.goals?.[field as keyof typeof agent.goals] : "—"}
+                            {hasGoals ? (
+                              <DopamineNumber value={agent.goals?.[field as keyof typeof agent.goals] || 0} />
+                            ) : "—"}
                           </div>
                         )}
                       </div>
