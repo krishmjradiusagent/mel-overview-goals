@@ -183,42 +183,48 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                     <HoverCardTrigger asChild>
                       <Info className="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 transition-colors" />
                     </HoverCardTrigger>
-                    <HoverCardContent className="w-[360px] p-4 normal-case tracking-normal" side="top" sideOffset={10}>
+                    <HoverCardContent className="w-[360px] p-4 normal-case tracking-normal shadow-xl border-slate-200" side="top" sideOffset={10}>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <h4 className="text-[14px] font-bold text-[#060D4D] leading-none">Appointment Types</h4>
-                          <span className="text-[10px] font-semibold text-gray-400">Definitions</span>
+                          <h4 className="text-sm font-bold text-slate-800 leading-none">Appointment Definitions</h4>
+                          <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-mono font-bold text-slate-600">
+                            DOCS
+                          </span>
                         </div>
-                        <Separator />
+                        <Separator className="bg-slate-100" />
                         <div className="space-y-4 pt-1">
                           <div className="flex gap-4">
-                            <div className="mt-0.5 bg-gray-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
-                              <Home className="h-4 w-4 text-gray-500" />
+                            <div className="mt-0.5 bg-blue-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
+                              <Home className="h-4 w-4 text-blue-500" />
                             </div>
                             <div className="space-y-0.5">
-                              <p className="text-[13px] font-bold text-gray-900">Property Showings</p>
-                              <p className="text-[11px] text-gray-500 leading-relaxed">In-person tours of listings for prospective buyer clients.</p>
+                              <p className="text-[13px] font-bold text-slate-800">Property Showings</p>
+                              <p className="text-[11px] text-slate-500 leading-relaxed">In-person tours of listings for prospective buyer clients.</p>
                             </div>
                           </div>
                           <div className="flex gap-4">
-                            <div className="mt-0.5 bg-gray-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
-                              <Users className="h-4 w-4 text-gray-500" />
+                            <div className="mt-0.5 bg-purple-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
+                              <Users className="h-4 w-4 text-purple-500" />
                             </div>
                             <div className="space-y-0.5">
-                              <p className="text-[13px] font-bold text-gray-900">Client Meetings</p>
-                              <p className="text-[11px] text-gray-500 leading-relaxed">Strategic consultations, listing presentations, or signing sessions.</p>
+                              <p className="text-[13px] font-bold text-slate-800">Client Meetings</p>
+                              <p className="text-[11px] text-slate-500 leading-relaxed">Strategic consultations, listing presentations, or signing sessions.</p>
                             </div>
                           </div>
                           <div className="flex gap-4">
-                            <div className="mt-0.5 bg-gray-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
-                              <CalendarCheck className="h-4 w-4 text-gray-500" />
+                            <div className="mt-0.5 bg-emerald-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
+                              <CalendarCheck className="h-4 w-4 text-emerald-500" />
                             </div>
                             <div className="space-y-0.5">
-                              <p className="text-[13px] font-bold text-gray-900">Open Houses</p>
-                              <p className="text-[11px] text-gray-500 leading-relaxed">Scheduled public marketing events to drive high volume traffic.</p>
+                              <p className="text-[13px] font-bold text-slate-800">Open Houses</p>
+                              <p className="text-[11px] text-slate-500 leading-relaxed">Scheduled public marketing events to drive high volume traffic.</p>
                             </div>
                           </div>
                         </div>
+                        <Separator className="bg-slate-100" />
+                        <p className="text-[10px] text-muted-foreground italic">
+                          Includes both scheduled and completed events.
+                        </p>
                       </div>
                     </HoverCardContent>
                   </HoverCard>
@@ -265,40 +271,52 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                       ) : field === "appointments" && hasGoals ? (
                         <HoverCard openDelay={100}>
                           <HoverCardTrigger asChild>
-                            <div className="w-fit text-[14px] font-medium text-gray-700 cursor-pointer underline decoration-[#060D4D]/20 underline-offset-4 hover:decoration-[#060D4D]/50 transition-colors">
+                            <span className="cursor-help font-semibold text-slate-900 border-b border-dotted border-slate-400 hover:border-slate-900 transition-colors">
                               {agent.goals?.[field as keyof typeof agent.goals]}
-                            </div>
+                            </span>
                           </HoverCardTrigger>
-                          <HoverCardContent side="right" align="center" sideOffset={12} className="w-64 p-4 normal-case tracking-normal">
+                          <HoverCardContent side="right" align="start" className="w-[280px] p-4 normal-case tracking-normal shadow-xl border-slate-200">
                             <div className="space-y-3">
-                              <div className="flex justify-between items-center">
-                                <span className="text-[14px] font-bold text-[#060D4D]">Breakdown</span>
-                                <span className="text-[10px] font-semibold text-gray-400">Total: {agent.goals?.appointments}</span>
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-sm font-bold text-slate-800">Appointment Breakdown</h4>
+                                <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-mono font-bold text-slate-600 uppercase">
+                                  Total: {agent.goals?.appointments}
+                                </span>
                               </div>
-                              <Separator />
-                              <div className="space-y-3 pt-1">
-                                <div className="flex justify-between items-center text-[13px]">
-                                  <div className="flex items-center gap-3">
-                                    <Home className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 font-medium font-sans">Showings</span>
+                              
+                              <Separator className="bg-slate-100" />
+                              
+                              <div className="grid gap-3 pt-1">
+                                <div className="flex items-center justify-between text-[13px]">
+                                  <div className="flex items-center gap-2 text-slate-600">
+                                    <Home className="h-4 w-4 text-blue-500" />
+                                    <span>Property Showings</span>
                                   </div>
-                                  <span className="font-mono font-bold text-[#060D4D] text-[14px]">{Math.floor((agent.goals?.appointments || 0) * 0.5)}</span>
+                                  <span className="font-mono font-medium text-slate-900">{Math.floor((agent.goals?.appointments || 0) * 0.5)}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-[13px]">
-                                  <div className="flex items-center gap-3">
-                                    <Users className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 font-medium font-sans">Meetings</span>
+                                
+                                <div className="flex items-center justify-between text-[13px]">
+                                  <div className="flex items-center gap-2 text-slate-600">
+                                    <Users className="h-4 w-4 text-purple-500" />
+                                    <span>Client Meetings</span>
                                   </div>
-                                  <span className="font-mono font-bold text-[#060D4D] text-[14px]">{Math.ceil((agent.goals?.appointments || 0) * 0.3)}</span>
+                                  <span className="font-mono font-medium text-slate-900">{Math.ceil((agent.goals?.appointments || 0) * 0.3)}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-[13px]">
-                                  <div className="flex items-center gap-3">
-                                    <CalendarCheck className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 font-medium font-sans">Open Houses</span>
+                                
+                                <div className="flex items-center justify-between text-[13px]">
+                                  <div className="flex items-center gap-2 text-slate-600">
+                                    <CalendarCheck className="h-4 w-4 text-emerald-500" />
+                                    <span>Open Houses</span>
                                   </div>
-                                  <span className="font-mono font-bold text-[#060D4D] text-[14px]">{Math.ceil((agent.goals?.appointments || 0) * 0.2)}</span>
+                                  <span className="font-mono font-medium text-slate-900">{Math.ceil((agent.goals?.appointments || 0) * 0.2)}</span>
                                 </div>
                               </div>
+
+                              <Separator className="bg-slate-100" />
+                              
+                              <p className="text-[10px] text-muted-foreground italic leading-tight">
+                                Includes both scheduled and completed events.
+                              </p>
                             </div>
                           </HoverCardContent>
                         </HoverCard>
