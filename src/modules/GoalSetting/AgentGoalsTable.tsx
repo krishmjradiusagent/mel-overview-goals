@@ -352,9 +352,9 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
               <TableHead className="w-[280px] text-[12px] font-bold text-gray-400 uppercase tracking-widest">Agent</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">New Leads</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Calls</TableHead>
-              <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Unique Convos</TableHead>
+              <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Unique Conversations</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                <div className="flex items-center gap-1.5">
                   <span>Appointments</span>
                   <HoverCard openDelay={200}>
                     <HoverCardTrigger asChild>
