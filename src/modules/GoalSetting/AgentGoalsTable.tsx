@@ -3,7 +3,8 @@ import {
   Pencil, 
   Check, 
   X, 
-  Users
+  Users,
+  Info
 } from "lucide-react"
 import { 
   Table, 
@@ -17,6 +18,19 @@ import { Badge } from "../../components/ui/Badge"
 import { Button } from "../../components/ui/Button"
 import { Input } from "../../components/ui/Input"
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/Avatar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../components/ui/Tooltip"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "../../components/ui/Dialog"
 import { toast } from "sonner"
 import { BulkGoalSettingModal } from "./BulkGoalSettingModal"
 import { cn } from "../../lib/utils"
@@ -100,6 +114,7 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
     appointments: 0
   })
   const [bulkModalOpen, setBulkModalOpen] = React.useState(false)
+  const [breakdownAgent, setBreakdownAgent] = React.useState<AgentGoal | null>(null)
 
   const isAdmin = role === "adminView"
 
@@ -141,6 +156,7 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
   }
 
   return (
+    <TooltipProvider>
     <div className="w-full space-y-6 font-sans">
       <div className="pt-8 border-t border-[#EFEFEF] -mx-8 px-8 flex items-start justify-between">
         <div className="space-y-1">
@@ -167,7 +183,16 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">New Leads</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Calls</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Unique Convos</TableHead>
-              <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Appts</TableHead>
+              <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">
+                <Tooltip>
+                  <TooltipTrigger className="flex items-center gap-1 hover:text-gray-600 transition-colors">
+                    Appointments <Info className="h-3.5 w-3.5" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">Includes property showings, client meetings, and open houses (scheduled + completed)</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Status</TableHead>
               <TableHead className="w-[80px]"></TableHead>
             </TableRow>
@@ -207,12 +232,16 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                           onChange={(e) => handleInputChange(field as keyof typeof editValues, e.target.value)}
                         />
                       ) : (
-                        <span className={cn(
-                          "text-[14px] font-medium",
-                          hasGoals ? "text-gray-700" : "text-gray-300"
-                        )}>
+                        <div 
+                          className={cn(
+                            "text-[14px] font-medium",
+                            hasGoals ? "text-gray-700" : "text-gray-300",
+                            field === "appointments" && hasGoals && "cursor-pointer hover:text-blue-600 hover:underline decoration-blue-600/30"
+                          )}
+                          onClick={() => field === "appointments" && hasGoals && setBreakdownAgent(agent)}
+                        >
                           {hasGoals ? agent.goals?.[field as keyof typeof agent.goals] : "—"}
-                        </span>
+                        </div>
                       )}
                     </TableCell>
                   ))}
@@ -263,6 +292,52 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
         open={bulkModalOpen}
         onOpenChange={setBulkModalOpen}
       />
+
+      <Dialog open={!!breakdownAgent} onOpenChange={() => setBreakdownAgent(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Avatar className="h-6 w-6">
+                <AvatarImage src={breakdownAgent?.avatarUrl} />
+                <AvatarFallback>{breakdownAgent?.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              {breakdownAgent?.name}'s Appointments
+            </DialogTitle>
+            <DialogDescription>
+              Breakdown of appointment goals for {breakdownAgent?.month}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-6 space-y-4">
+            <div className="grid grid-cols-2 gap-4 pb-4 border-b border-gray-100">
+               <div>
+                  <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mb-1">Scheduled</p>
+                  <p className="text-2xl font-semibold text-[#060D4D]">{breakdownAgent?.goals?.appointments || 0}</p>
+               </div>
+               <div>
+                  <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mb-1">Completed</p>
+                  <p className="text-2xl font-semibold text-emerald-600">{Math.floor((breakdownAgent?.goals?.appointments || 0) * 0.8)}</p>
+               </div>
+            </div>
+            
+            <div className="space-y-3">
+               {[
+                 { label: "Property Showings", value: Math.floor((breakdownAgent?.goals?.appointments || 0) * 0.5) },
+                 { label: "Client Meetings", value: Math.ceil((breakdownAgent?.goals?.appointments || 0) * 0.3) },
+                 { label: "Open Houses", value: Math.ceil((breakdownAgent?.goals?.appointments || 0) * 0.2) }
+               ].map((item, i) => (
+                 <div key={i} className="flex items-center justify-between py-1">
+                    <span className="text-sm font-medium text-gray-600">{item.label}</span>
+                    <span className="text-sm font-bold text-gray-900">{item.value}</span>
+                 </div>
+               ))}
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button variant="outline" onClick={() => setBreakdownAgent(null)}>Close</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
+    </TooltipProvider>
   )
 }
