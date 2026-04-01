@@ -22,7 +22,6 @@ export function Layout({ children, activeTab = "Team settings", setActiveTab }: 
     "Billing",
     "Finances",
     "Team settings",
-    "Goals",
     "Notification settings",
   ]
 
