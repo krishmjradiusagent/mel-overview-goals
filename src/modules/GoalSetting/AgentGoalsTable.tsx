@@ -183,39 +183,39 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                     <HoverCardTrigger asChild>
                       <Info className="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 transition-colors" />
                     </HoverCardTrigger>
-                    <HoverCardContent className="w-80 p-4" side="top" sideOffset={10}>
+                    <HoverCardContent className="w-[360px] p-4 normal-case tracking-normal" side="top" sideOffset={10}>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <h4 className="text-[15px] font-bold text-[#060D4D]">Appointment Types</h4>
-                          <span className="text-[11px] font-semibold text-gray-400">Definitions</span>
+                          <h4 className="text-[14px] font-bold text-[#060D4D] leading-none">Appointment Types</h4>
+                          <span className="text-[10px] font-semibold text-gray-400">Definitions</span>
                         </div>
                         <Separator />
                         <div className="space-y-4 pt-1">
                           <div className="flex gap-4">
-                            <div className="mt-1 bg-gray-50 rounded-lg p-2 shrink-0">
+                            <div className="mt-0.5 bg-gray-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
                               <Home className="h-4 w-4 text-gray-500" />
                             </div>
-                            <div className="space-y-1">
-                              <p className="text-[14px] font-bold text-gray-900">Property Showings</p>
-                              <p className="text-[12px] text-gray-500 leading-relaxed">In-person tours of listings for prospective buyer clients.</p>
+                            <div className="space-y-0.5">
+                              <p className="text-[13px] font-bold text-gray-900">Property Showings</p>
+                              <p className="text-[11px] text-gray-500 leading-relaxed">In-person tours of listings for prospective buyer clients.</p>
                             </div>
                           </div>
                           <div className="flex gap-4">
-                            <div className="mt-1 bg-gray-50 rounded-lg p-2 shrink-0">
+                            <div className="mt-0.5 bg-gray-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
                               <Users className="h-4 w-4 text-gray-500" />
                             </div>
-                            <div className="space-y-1">
-                              <p className="text-[14px] font-bold text-gray-900">Client Meetings</p>
-                              <p className="text-[12px] text-gray-500 leading-relaxed">Strategic consultations, listing presentations, or signing sessions.</p>
+                            <div className="space-y-0.5">
+                              <p className="text-[13px] font-bold text-gray-900">Client Meetings</p>
+                              <p className="text-[11px] text-gray-500 leading-relaxed">Strategic consultations, listing presentations, or signing sessions.</p>
                             </div>
                           </div>
                           <div className="flex gap-4">
-                            <div className="mt-1 bg-gray-50 rounded-lg p-2 shrink-0">
+                            <div className="mt-0.5 bg-gray-50 rounded-lg p-2 shrink-0 h-9 w-9 flex items-center justify-center">
                               <CalendarCheck className="h-4 w-4 text-gray-500" />
                             </div>
-                            <div className="space-y-1">
-                              <p className="text-[14px] font-bold text-gray-900">Open Houses</p>
-                              <p className="text-[12px] text-gray-500 leading-relaxed">Scheduled public marketing events to drive high volume traffic.</p>
+                            <div className="space-y-0.5">
+                              <p className="text-[13px] font-bold text-gray-900">Open Houses</p>
+                              <p className="text-[11px] text-gray-500 leading-relaxed">Scheduled public marketing events to drive high volume traffic.</p>
                             </div>
                           </div>
                         </div>
@@ -269,34 +269,34 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                               {agent.goals?.[field as keyof typeof agent.goals]}
                             </div>
                           </HoverCardTrigger>
-                          <HoverCardContent side="right" align="center" sideOffset={12} className="w-60 p-4">
+                          <HoverCardContent side="right" align="center" sideOffset={12} className="w-64 p-4 normal-case tracking-normal">
                             <div className="space-y-3">
                               <div className="flex justify-between items-center">
-                                <span className="text-[15px] font-bold text-[#060D4D]">Breakdown</span>
-                                <span className="text-[11px] font-semibold text-gray-400">Total: {agent.goals?.appointments}</span>
+                                <span className="text-[14px] font-bold text-[#060D4D]">Breakdown</span>
+                                <span className="text-[10px] font-semibold text-gray-400">Total: {agent.goals?.appointments}</span>
                               </div>
                               <Separator />
                               <div className="space-y-3 pt-1">
-                                <div className="flex justify-between items-center text-[14px]">
+                                <div className="flex justify-between items-center text-[13px]">
                                   <div className="flex items-center gap-3">
                                     <Home className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 font-medium">Showings</span>
+                                    <span className="text-gray-600 font-medium font-sans">Showings</span>
                                   </div>
-                                  <span className="font-mono font-bold text-[#060D4D] text-[15px]">{Math.floor((agent.goals?.appointments || 0) * 0.5)}</span>
+                                  <span className="font-mono font-bold text-[#060D4D] text-[14px]">{Math.floor((agent.goals?.appointments || 0) * 0.5)}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-[14px]">
+                                <div className="flex justify-between items-center text-[13px]">
                                   <div className="flex items-center gap-3">
                                     <Users className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 font-medium">Meetings</span>
+                                    <span className="text-gray-600 font-medium font-sans">Meetings</span>
                                   </div>
-                                  <span className="font-mono font-bold text-[#060D4D] text-[15px]">{Math.ceil((agent.goals?.appointments || 0) * 0.3)}</span>
+                                  <span className="font-mono font-bold text-[#060D4D] text-[14px]">{Math.ceil((agent.goals?.appointments || 0) * 0.3)}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-[14px]">
+                                <div className="flex justify-between items-center text-[13px]">
                                   <div className="flex items-center gap-3">
                                     <CalendarCheck className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 font-medium">Open Houses</span>
+                                    <span className="text-gray-600 font-medium font-sans">Open Houses</span>
                                   </div>
-                                  <span className="font-mono font-bold text-[#060D4D] text-[15px]">{Math.ceil((agent.goals?.appointments || 0) * 0.2)}</span>
+                                  <span className="font-mono font-bold text-[#060D4D] text-[14px]">{Math.ceil((agent.goals?.appointments || 0) * 0.2)}</span>
                                 </div>
                               </div>
                             </div>
