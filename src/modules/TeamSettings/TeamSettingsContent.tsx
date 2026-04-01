@@ -1,5 +1,5 @@
 import { Search, Info, Trash2 } from "lucide-react"
-import { GoalSettingSection } from "../GoalSetting/GoalSettingSection"
+import { AgentGoalsTable } from "../GoalSetting/AgentGoalsTable"
 
 export function TeamSettingsContent() {
   const teamMembers = [
@@ -137,7 +137,7 @@ export function TeamSettingsContent() {
 
       {/* Goals Section - Full Width */}
       <div className="w-full">
-        <GoalSettingSection />
+        <AgentGoalsTable role="teamLeadView" />
       </div>
     </div>
   )
