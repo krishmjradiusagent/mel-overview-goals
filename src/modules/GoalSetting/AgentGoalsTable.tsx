@@ -19,18 +19,11 @@ import { Button } from "../../components/ui/Button"
 import { Input } from "../../components/ui/Input"
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/Avatar"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../components/ui/Tooltip"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription
-} from "../../components/ui/Dialog"
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../../components/ui/HoverCard"
+import { Separator } from "../../components/ui/Separator"
 import { toast } from "sonner"
 import { BulkGoalSettingModal } from "./BulkGoalSettingModal"
 import { cn } from "../../lib/utils"
@@ -114,7 +107,6 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
     appointments: 0
   })
   const [bulkModalOpen, setBulkModalOpen] = React.useState(false)
-  const [breakdownAgent, setBreakdownAgent] = React.useState<AgentGoal | null>(null)
 
   const isAdmin = role === "adminView"
 
@@ -156,7 +148,6 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
   }
 
   return (
-    <TooltipProvider>
     <div className="w-full space-y-6 font-sans">
       <div className="pt-8 border-t border-[#EFEFEF] -mx-8 px-8 flex items-start justify-between">
         <div className="space-y-1">
@@ -184,14 +175,27 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Calls</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Unique Convos</TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">
-                <Tooltip>
-                  <TooltipTrigger className="flex items-center gap-1 hover:text-gray-600 transition-colors">
-                    Appointments <Info className="h-3.5 w-3.5" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">Includes property showings, client meetings, and open houses (scheduled + completed)</p>
-                  </TooltipContent>
-                </Tooltip>
+                <div className="flex items-center gap-1">
+                  <span>Appointments</span>
+                  <HoverCard openDelay={200}>
+                    <HoverCardTrigger asChild>
+                      <Info className="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 transition-colors" />
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-72" side="top">
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-[#060D4D]">Appointment Types</h4>
+                        <p className="text-xs text-gray-500">
+                          Tracks all engagement activities including:
+                        </p>
+                        <ul className="text-xs space-y-1.5 list-disc pl-4 text-gray-600">
+                          <li><strong>Property Showings:</strong> In-person tours of listings for prospective buyers.</li>
+                          <li><strong>Client Meetings:</strong> Strategy, listing, or consultation sessions.</li>
+                          <li><strong>Open Houses:</strong> Scheduled public marketing events.</li>
+                        </ul>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
               </TableHead>
               <TableHead className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Status</TableHead>
               <TableHead className="w-[80px]"></TableHead>
@@ -231,15 +235,42 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                           value={editValues[field as keyof typeof editValues] || ""}
                           onChange={(e) => handleInputChange(field as keyof typeof editValues, e.target.value)}
                         />
+                      ) : field === "appointments" && hasGoals ? (
+                        <HoverCard openDelay={100}>
+                          <HoverCardTrigger asChild>
+                            <div className="text-[14px] font-medium text-gray-700 cursor-pointer hover:text-blue-600 hover:underline decoration-blue-600/30 underline-offset-4">
+                              {agent.goals?.[field as keyof typeof agent.goals]}
+                            </div>
+                          </HoverCardTrigger>
+                          <HoverCardContent side="right" align="start" className="w-56 p-4">
+                            <div className="space-y-3">
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs font-semibold text-[#060D4D]">Breakdown</span>
+                                <span className="text-[10px] uppercase font-bold text-gray-400">Total: {agent.goals?.appointments}</span>
+                              </div>
+                              <Separator />
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-[13px]">
+                                  <span className="text-gray-500">🏠 Showings</span>
+                                  <span className="font-mono font-bold">{Math.floor((agent.goals?.appointments || 0) * 0.5)}</span>
+                                </div>
+                                <div className="flex justify-between text-[13px]">
+                                  <span className="text-gray-500">🤝 Meetings</span>
+                                  <span className="font-mono font-bold">{Math.ceil((agent.goals?.appointments || 0) * 0.3)}</span>
+                                </div>
+                                <div className="flex justify-between text-[13px]">
+                                  <span className="text-gray-500">📋 Open Houses</span>
+                                  <span className="font-mono font-bold">{Math.ceil((agent.goals?.appointments || 0) * 0.2)}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
                       ) : (
-                        <div 
-                          className={cn(
-                            "text-[14px] font-medium",
-                            hasGoals ? "text-gray-700" : "text-gray-300",
-                            field === "appointments" && hasGoals && "cursor-pointer hover:text-blue-600 hover:underline decoration-blue-600/30"
-                          )}
-                          onClick={() => field === "appointments" && hasGoals && setBreakdownAgent(agent)}
-                        >
+                        <div className={cn(
+                          "text-[14px] font-medium",
+                          hasGoals ? "text-gray-700" : "text-gray-300"
+                        )}>
                           {hasGoals ? agent.goals?.[field as keyof typeof agent.goals] : "—"}
                         </div>
                       )}
@@ -292,57 +323,6 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
         open={bulkModalOpen}
         onOpenChange={setBulkModalOpen}
       />
-
-      <Dialog open={!!breakdownAgent} onOpenChange={() => setBreakdownAgent(null)}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Avatar className="h-6 w-6">
-                <AvatarImage src={breakdownAgent?.avatarUrl} />
-                <AvatarFallback>{breakdownAgent?.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              {breakdownAgent?.name}'s Appointments
-            </DialogTitle>
-            <DialogDescription>
-              Breakdown of appointment goals for {breakdownAgent?.month}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="pt-2 space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-               <div className="bg-[#F9FAFB] p-4 rounded-[16px] border border-[#F0F0F0]">
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Scheduled</p>
-                  <p className="text-3xl font-semibold text-[#060D4D]">{breakdownAgent?.goals?.appointments || 0}</p>
-               </div>
-               <div className="bg-[#F0FDF4] p-4 rounded-[16px] border border-[#DCFCE7]">
-                  <p className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Completed</p>
-                  <p className="text-3xl font-semibold text-emerald-700">{Math.floor((breakdownAgent?.goals?.appointments || 0) * 0.8)}</p>
-               </div>
-            </div>
-            
-            <div className="space-y-1">
-               {[
-                 { label: "Property Showings", value: Math.floor((breakdownAgent?.goals?.appointments || 0) * 0.5) },
-                 { label: "Client Meetings", value: Math.ceil((breakdownAgent?.goals?.appointments || 0) * 0.3) },
-                 { label: "Open Houses", value: Math.ceil((breakdownAgent?.goals?.appointments || 0) * 0.2) }
-               ].map((item, i) => (
-                 <div key={i} className="flex items-center justify-between py-3 border-b border-[#F5F5F5] last:border-0 px-1">
-                    <span className="text-[15px] font-medium text-gray-600">{item.label}</span>
-                    <span className="text-[15px] font-bold text-gray-900">{item.value}</span>
-                 </div>
-               ))}
-            </div>
-          </div>
-          <div className="flex justify-end pt-4">
-            <Button 
-               className="rounded-xl bg-black text-white hover:bg-gray-800 px-6 h-11 text-[15px] font-medium transition-all"
-               onClick={() => setBreakdownAgent(null)}
-            >
-               Close
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
-    </TooltipProvider>
   )
 }
