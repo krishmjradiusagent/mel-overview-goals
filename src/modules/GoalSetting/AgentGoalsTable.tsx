@@ -149,7 +149,12 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
   }
 
   return (
-    <div className="w-full space-y-4 font-sans">
+    <div className="w-full space-y-6 font-sans">
+      <div className="space-y-1">
+        <h2 className="text-xl font-semibold text-[#111827]">Goals</h2>
+        <p className="text-sm text-muted-foreground">Set monthly targets for your team</p>
+      </div>
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
