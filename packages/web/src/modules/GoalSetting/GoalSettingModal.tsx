@@ -96,10 +96,15 @@ export function GoalSettingModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] rounded-3xl p-8 border-none bg-white shadow-2xl font-sans">
+        {/* Direct children of DialogContent for accessibility */}
         <DialogHeader className="mb-6 space-y-2">
           <div className="w-12 h-12 bg-[#EEF2FF] rounded-2xl flex items-center justify-center text-primary mb-2">
             <Target className="h-6 w-6" />
           </div>
+          {/* Note: In shadcn, DialogTitle and DialogDescription should be rendered here.
+              If Radix is warning, we may need to ensure DialogHeader doesn't swallow them. 
+              But here we keep them as they are and see if removing the wrapper helps or just ensuring they are present.
+           */}
           <DialogTitle className="text-[24px] font-bold text-[#111827] tracking-tight">Monthly Goals for {agentName}</DialogTitle>
           <DialogDescription className="text-[14px] font-medium text-gray-500">
             Targets help your agents stay focused. You can adjust these anytime.
