@@ -6,7 +6,8 @@ import {
   Users,
   Info,
   Home,
-  CalendarCheck
+  CalendarCheck,
+  Star
 } from "lucide-react"
 import { 
   Table, 
@@ -387,9 +388,42 @@ export function AgentGoalsTable({ role = "teamLeadView" }: AgentGoalsTableProps)
                   ))}
 
                   <TableCell>
-                    <Badge variant={hasGoals ? "success" : "warning"} className="h-5 px-2 text-[10px] font-bold uppercase tracking-tight">
-                      {hasGoals ? "Goals set" : "Not set"}
-                    </Badge>
+                    {(() => {
+                      if (!hasGoals || !agent.actuals) {
+                        return (
+                          <Badge variant="warning" className="h-5 px-2 text-[10px] font-bold uppercase tracking-tight">
+                            Not set
+                          </Badge>
+                        )
+                      }
+                      
+                      const fields = ["newLeads", "calls", "uniqueConvos", "appointments"] as const;
+                      const progressValues = fields.map(f => (agent.actuals![f] / agent.goals![f]!) * 100);
+                      const avgProgress = progressValues.reduce((a, b) => a + b, 0) / fields.length;
+                      
+                      if (avgProgress >= 105) {
+                        return (
+                          <Badge variant="success" className="h-5 px-5 text-[10px] font-bold uppercase tracking-tight gap-1.5 relative">
+                            <Star className="h-3 w-3 fill-emerald-600 text-emerald-600 absolute left-1.5 top-1/2 -translate-y-1/2" />
+                            Exceeded
+                          </Badge>
+                        )
+                      }
+                      
+                      if (avgProgress >= 80) {
+                        return (
+                          <Badge variant="ontrack" className="h-5 px-2 text-[10px] font-bold uppercase tracking-tight">
+                            On Track
+                          </Badge>
+                        )
+                      }
+                      
+                      return (
+                        <Badge variant="behind" className="h-5 px-2 text-[10px] font-bold uppercase tracking-tight">
+                          Behind Goal
+                        </Badge>
+                      )
+                    })()}
                   </TableCell>
 
                   <TableCell className="text-right">
