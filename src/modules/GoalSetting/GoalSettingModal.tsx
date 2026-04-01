@@ -134,7 +134,6 @@ export function GoalSettingModal({
                    id={metric.key}
                    type="number"
                    placeholder={metric.placeholder}
-                   className="h-[45px] bg-white border-[#d0d5dd] rounded-[8px] text-[16px] font-medium text-[#111827] placeholder:text-gray-400 focus-visible:ring-primary/10 focus-visible:border-primary/50 transition-all shadow-sm"
                    {...form.register(metric.key as any, { valueAsNumber: true })}
                    disabled={saving || loading}
                 />
