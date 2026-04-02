@@ -61,8 +61,8 @@ const TYPES = [
     label: "Transaction Coordinator",
     description: "Manages document flow, transaction coordination",
     icon: ShieldCheck,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
+    color: "text-[#5A5FF2]",
+    bgColor: "bg-[#5A5FF2]/10",
   },
   {
     id: "lender" as CollaboratorType,
@@ -303,7 +303,7 @@ export function InviteCollaboratorModal({
                     <Field className="gap-0.5">
                       <FieldLabel className="text-[13px] text-slate-700 font-bold leading-none mb-1">Secure Access</FieldLabel>
                       <FieldDescription className="text-[12px] text-slate-500 leading-relaxed font-medium">
-                        Invitations expire in <span className="text-blue-600 font-bold">7 days</span>. Reminders will be automated.
+                        Invitations expire in <span className="text-[#5A5FF2] font-bold">7 days</span>. Reminders will be automated.
                       </FieldDescription>
                     </Field>
                   </div>
@@ -326,7 +326,7 @@ export function InviteCollaboratorModal({
                 {step === 1 ? (
                   <Button
                     type="button"
-                    className="flex-1 h-14 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-[30px] shadow-xl shadow-blue-500/20 transition-all active:scale-95"
+                    className="flex-1 h-14 bg-[#5A5FF2] hover:bg-[#5A5FF2]/90 text-white font-bold rounded-[30px] shadow-xl shadow-[#5A5FF2]/20 transition-all active:scale-95"
                     onClick={handleNext}
                     disabled={!selectedType}
                   >
@@ -335,7 +335,7 @@ export function InviteCollaboratorModal({
                 ) : (
                   <Button
                     type="submit"
-                    className="flex-1 h-14 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-[30px] shadow-xl shadow-blue-500/20 transition-all active:scale-95"
+                    className="flex-1 h-14 bg-[#5A5FF2] hover:bg-[#5A5FF2]/90 text-white font-bold rounded-[30px] shadow-xl shadow-[#5A5FF2]/20 transition-all active:scale-95"
                     disabled={isSubmitting || !form.getValues("email")}
                   >
                     {isSubmitting ? (

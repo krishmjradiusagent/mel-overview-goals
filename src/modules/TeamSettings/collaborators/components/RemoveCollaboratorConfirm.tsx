@@ -93,11 +93,11 @@ export function RemoveCollaboratorConfirm({
                 {potentialReassignees.length > 0 ? (
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 pl-1">
-                       <ArrowRight className="h-3.5 w-3.5 text-blue-500 font-bold" />
+                       <ArrowRight className="h-3.5 w-3.5 text-[#5A5FF2] font-bold" />
                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Transfer to another {collaborator.type.toUpperCase()}</label>
                     </div>
                     <Select onValueChange={setReassignTarget} value={reassignTarget || ""}>
-                      <SelectTrigger className="w-full h-14 bg-white border border-slate-200 text-slate-900 rounded-[20px] shadow-sm focus:ring-4 focus:ring-blue-50 transition-all font-semibold px-6">
+                      <SelectTrigger className="w-full h-14 bg-white border border-slate-200 text-slate-900 rounded-[20px] shadow-sm focus:ring-4 focus:ring-[#5A5FF2]/5 transition-all font-semibold px-6">
                         <SelectValue placeholder={`Select a replacement...`} />
                       </SelectTrigger>
                       <SelectContent className="bg-white border-slate-100 text-slate-700 shadow-2xl rounded-2xl p-2">
@@ -128,7 +128,7 @@ export function RemoveCollaboratorConfirm({
                 onClick={handleConfirm}
                 className={cn(
                    "flex-1 h-14 rounded-[30px] font-bold text-white shadow-xl transition-all active:scale-95",
-                   reassignTarget ? "bg-blue-600 hover:bg-blue-700 shadow-blue-500/20" : "bg-red-600 hover:bg-red-700 shadow-red-500/20"
+                   reassignTarget ? "bg-[#5A5FF2] hover:bg-[#5A5FF2]/90 shadow-[#5A5FF2]/20" : "bg-red-600 hover:bg-red-700 shadow-red-500/20"
                 )}
               >
                 {reassignTarget ? (

@@ -77,23 +77,27 @@ export function CollaboratorRow({
 
         <TableCell>
           <div className="flex justify-center">
-            <StatusBadge status={collaborator.status} expiryDays={7} />
+            <StatusBadge 
+              status={collaborator.status} 
+              expiryDays={7} 
+              onResend={() => onResend(collaborator.id)}
+            />
           </div>
         </TableCell>
 
         <TableCell className="text-right pr-8">
-          <div className="flex flex-col gap-1.5 items-end justify-center h-full">
+          <div className="flex flex-row items-center justify-end gap-4 h-full">
             <Badge 
               variant="secondary" 
               className={cn(
-                "h-5 px-2 text-[10px] font-black uppercase tracking-widest bg-slate-50 border-slate-100",
-                assignments.clients.length === 0 ? "text-slate-400" : "text-blue-600"
+                "h-5 px-2 text-[10px] font-black uppercase tracking-widest bg-slate-50 border-slate-100 shrink-0",
+                assignments.clients.length === 0 ? "text-slate-400" : "text-[#5A5FF2]"
               )}
             >
               {assignments.clients.length} CLIENTS
             </Badge>
             {isTCorVA && (
-              <Badge variant="secondary" className="h-5 px-2 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-50 border-slate-100">
+              <Badge variant="secondary" className="h-5 px-2 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-50 border-slate-100 shrink-0">
                 {assignments.transactions.length} TXNS
               </Badge>
             )}
@@ -111,8 +115,8 @@ export function CollaboratorRow({
                  <DropdownMenuLabel className="text-[10px] uppercase text-slate-400 font-black p-3 tracking-[.25em]">Security Actions</DropdownMenuLabel>
                  <DropdownMenuSeparator className="bg-slate-50 my-1" />
                  {collaborator.status === "invited" && (
-                   <DropdownMenuItem className="gap-3 p-3 cursor-pointer focus:bg-slate-50 focus:text-blue-600 rounded-lg" onClick={() => onResend(collaborator.id)}>
-                      <Mail className="h-4 w-4 text-blue-600" /> Resend Credentials
+                   <DropdownMenuItem className="gap-3 p-3 cursor-pointer focus:bg-slate-50 focus:text-[#5A5FF2] rounded-lg" onClick={() => onResend(collaborator.id)}>
+                      <Mail className="h-4 w-4 text-[#5A5FF2]" /> Resend Credentials
                    </DropdownMenuItem>
                  )}
                  <DropdownMenuItem className="gap-3 p-3 cursor-pointer focus:bg-slate-50 focus:text-red-600 rounded-lg group" onClick={() => onRemove(collaborator)}>
