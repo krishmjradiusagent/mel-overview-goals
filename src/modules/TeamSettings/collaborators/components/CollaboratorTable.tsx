@@ -68,7 +68,7 @@ export function CollaboratorTable({
         <div className="flex items-center gap-3 w-full md:w-auto">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="h-12 px-5 gap-3 border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 rounded-xl font-bold">
+              <Button variant="outline" className="h-12 px-5 gap-3 border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 rounded-[30px] font-bold">
                 <Filter className="h-4 w-4" /> 
                 {filterType === "all" ? "Filter Type" : filterType.toUpperCase()}
                 <ChevronDown className="h-4 w-4 opacity-50" />
@@ -87,7 +87,7 @@ export function CollaboratorTable({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="h-12 px-5 gap-3 border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 rounded-xl font-bold">
+              <Button variant="outline" className="h-12 px-5 gap-3 border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 rounded-[30px] font-bold">
                 <Filter className="h-4 w-4" /> 
                 {filterStatus === "all" ? "Filter Status" : filterStatus.toUpperCase()}
                 <ChevronDown className="h-4 w-4 opacity-50" />
