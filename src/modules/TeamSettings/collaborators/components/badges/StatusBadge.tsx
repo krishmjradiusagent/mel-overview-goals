@@ -35,8 +35,8 @@ export function StatusBadge({ status, expiryDays }: StatusBadgeProps) {
   const Icon = config.icon;
 
   return (
-    <div className="flex flex-col gap-1.5 min-w-[90px]">
-      <Badge variant={config.variant} className="gap-1.5 h-6 px-2.5">
+    <div className="flex flex-col gap-1.5 items-start">
+      <Badge variant={config.variant} className="gap-1.5 h-6 px-2.5 w-fit">
         <Icon className="h-3.5 w-3.5" />
         {config.label}
       </Badge>

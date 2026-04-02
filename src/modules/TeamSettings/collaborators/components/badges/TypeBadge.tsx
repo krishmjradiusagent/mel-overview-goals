@@ -28,7 +28,7 @@ export function TypeBadge({ type }: TypeBadgeProps) {
   const config = TYPE_CONFIG[type as keyof typeof TYPE_CONFIG] || TYPE_CONFIG.tc;
   
   return (
-    <Badge variant={config.variant} className="rounded-md px-1.5 h-4 text-[9px]">
+    <Badge variant={config.variant} className="rounded-md px-1.5 h-4 text-[9px] w-fit">
       {config.label}
     </Badge>
   );
